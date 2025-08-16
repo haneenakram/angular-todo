@@ -1,0 +1,7 @@
+{
+  "routes": {
+    "/todo-angular": {},
+    "/todo-angular/auth/login": {},
+    "/todo-angular/tasks": {}
+  }
+}

@@ -11,6 +11,6 @@ export const routes: Routes = [
     component: TaskComponent,
     canActivate: [AuthGuard],
   },
-  { path: 'auth/login', component: LoginComponent },
+  // { path: 'auth/login', component: LoginComponent },
   { path: '**', redirectTo: 'tasks' }, // wildcard fallback
 ];

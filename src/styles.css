@@ -1,1 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css - Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --primary-pink: #FFB3D9;
+  --secondary-lavender: #C8A8E9;
+  --mint-green: #B8E6B8;
+  --peach: #FFD4B3;
+  --light-blue: #B3D9FF;
+  --cream: #FFF8E7;
+  --dark-text: #4A4A4A;
+  --white: #FFFFFF;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--light-blue) 100%);
+  min-height: 100vh;
+  color: var(--dark-text);
+  padding: 20px;
+}
+
+/* Remove default button and input styles */
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-pink);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-lavender);
+}

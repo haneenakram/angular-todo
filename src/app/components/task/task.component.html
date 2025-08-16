@@ -1,0 +1,161 @@
+<!-- src/app/task/task.component.html (Updated for Django Backend) -->
+<div class="task-container">
+  <!-- Input Section -->
+  <div class="input-section">
+    <div class="input-group">
+      <input 
+        type="text" 
+        class="todo-input" 
+        placeholder="What would you like to accomplish today? ✨"
+        [(ngModel)]="newTaskText"
+        (keypress)="onKeyPress($event)"
+        [disabled]="isLoading"
+        #taskInput>
+      <button 
+        class="add-btn" 
+        (click)="addTask()"
+        [disabled]="isLoading || !newTaskText.trim()">
+        <span *ngIf="!isLoading">Add ➕</span>
+        <span *ngIf="isLoading">Adding... ⏳</span>
+      </button>
+    </div>
+    
+    <!-- Enhanced Statistics -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number">{{ getTotalTasks() }}</div>
+        <div class="stat-label">Total Tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ getCompletedTasks() }}</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ getRemainingTasks() }}</div>
+        <div class="stat-label">Remaining</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ getInProgressTasks() }}</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Enhanced Filter Buttons -->
+  <div class="filter-buttons">
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'all'"
+      (click)="setFilter('all')">
+      All
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'active'"
+      (click)="setFilter('active')">
+      Active
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'completed'"
+      (click)="setFilter('completed')">
+      Done
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'pending'"
+      (click)="setFilter('pending')">
+      Pending
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'in-progress'"
+      (click)="setFilter('in-progress')">
+      In Progress 
+    </button>
+    <button 
+      class="filter-btn" 
+      [class.active]="currentFilter === 'on-hold'"
+      (click)="setFilter('on-hold')">
+      On Hold 
+    </button>
+  </div>
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading && tasks.length === 0" class="empty-state">
+    <span class="emoji"></span>
+    <p>Loading your tasks...</p>
+  </div>
+  
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && getFilteredTasks().length === 0" class="empty-state">
+    <span class="emoji" *ngIf="currentFilter === 'all'">🌸</span>
+    <span class="emoji" *ngIf="currentFilter === 'active'">🎯</span>
+    <span class="emoji" *ngIf="currentFilter === 'completed'"></span>
+    <span class="emoji" *ngIf="currentFilter === 'pending'">⏳</span>
+    <span class="emoji" *ngIf="currentFilter === 'in-progress'">🔄</span>
+    <span class="emoji" *ngIf="currentFilter === 'on-hold'">⏸️</span>
+    
+    <p *ngIf="currentFilter === 'all'">No tasks yet! Add your first todo above.</p>
+    <p *ngIf="currentFilter === 'active'">All caught up! You're amazing! 🌟</p>
+    <p *ngIf="currentFilter === 'completed'">No completed tasks yet. You've got this! 💪</p>
+    <p *ngIf="currentFilter === 'pending'">No pending tasks! 🎉</p>
+    <p *ngIf="currentFilter === 'in-progress'">No tasks in progress right now.</p>
+    <p *ngIf="currentFilter === 'on-hold'">No tasks on hold.</p>
+  </div>
+  
+  <!-- Enhanced Task List -->
+  <div class="todo-item" 
+       *ngFor="let task of getFilteredTasks(); trackBy: trackByTaskId"
+       [class.completed]="task.completed"
+       [class.in-progress]="task.status === 'I'"
+       [class.on-hold]="task.status === 'H'">
+    
+    <!-- Checkbox -->
+    <div class="todo-checkbox" 
+         [class.checked]="task.completed"
+         (click)="toggleTask(task)">
+    </div>
+    
+    <!-- Task Content -->
+    <div class="task-content">
+      <span class="todo-text" 
+            [class.completed]="task.completed">
+        {{ task.title }}
+      </span>
+      
+      <!-- Task Metadata -->
+      <div class="task-metadata" *ngIf="task.created_at">
+        <span class="status-badge" [class]="'status-' + task.status">
+          {{ getStatusEmoji(task.status) }} {{ task.status_display || task.status }}
+        </span>
+        <span class="task-date">
+          Created: {{ getFormattedDate(task.created_at) }}
+        </span>
+        <span class="task-id" *ngIf="task.id">
+          #{{ task.id }}
+        </span>
+      </div>
+    </div>
+    
+    <!-- Task Actions -->
+    <div class="task-actions">
+      <!-- Status Dropdown (optional - uncomment if you want status selection) -->
+      
+      <select class="status-select" 
+              [value]="task.status" 
+              (change)="updateTaskStatus(task, $any($event.target).value)"
+              *ngIf="!task.completed">
+        <option *ngFor="let status of statusOptions" [value]="status.value">
+          {{ status.emoji }} {{ status.label }}
+        </option>
+      </select>
+      
+      <button class="delete-btn" 
+              (click)="deleteTask(task)"
+              title="Delete task">
+        🗑️
+      </button>
+    </div>
+  </div>
+</div>

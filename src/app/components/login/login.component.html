@@ -1,0 +1,106 @@
+<!-- src/app/auth/login/login.component.html -->
+<div class="login-container">
+  <div class="login-card">
+    <!-- Header -->
+    <div class="login-header">
+      <div class="logo">
+        <div class="logo-icon">📝</div>
+        <h1>TodoApp</h1>
+      </div>
+      <p class="welcome-text">Welcome back! Please sign in to your account.</p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username" class="form-label">Username</label>
+        <div class="input-wrapper">
+          <span class="input-icon">👤</span>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            class="form-input"
+            [class.error]="isFieldInvalid('username')"
+            placeholder="Enter your username"
+          />
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('username')">
+          {{ getFieldError('username') }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔒</span>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-input"
+            [class.error]="isFieldInvalid('password')"
+            placeholder="Enter your password"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <div class="error-message" *ngIf="isFieldInvalid('password')">
+          {{ getFieldError('password') }}
+        </div>
+      </div>
+
+      <!-- Remember Me -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="rememberMe" class="checkbox-input">
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-text">Remember me</span>
+        </label>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-banner" *ngIf="errorMessage">
+        <span class="error-icon">⚠️</span>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isLoading || loginForm.invalid"
+        [class.loading]="isLoading"
+      >
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading" class="loading-content">
+          <span class="spinner"></span>
+          Signing In...
+        </span>
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <p class="demo-info">
+        <span class="info-icon">💡</span>
+        Demo credentials: admin / password123
+      </p>
+    </div>
+  </div>
+
+  <!-- Background Decoration -->
+  <div class="bg-decoration">
+    <div class="floating-task task-1">✨ Get things done!</div>
+    <div class="floating-task task-2">🚀 Stay organized</div>
+    <div class="floating-task task-3">⭐ Be productive</div>
+  </div>
+</div>
